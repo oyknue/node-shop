@@ -10,7 +10,6 @@ $(".navi > li").mouseover(function(){
       case 4:   
       $(this).find(".navi-subs").css({"display":"block"}); 
       break;
-      break;
       default:
         break;
       }

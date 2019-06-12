@@ -39,7 +39,7 @@ app.post('/admin/:method', (req, res) => {
 						else {
 							connect.release(); //conn객체에게 다시 열쇠를 돌려주는 셈
 							if(result[0]){
-                res.redirect("/admin/admin.html");
+                res.redirect("/admin/cate_top1.html");
               } //result 0번 존재하면 관리자 존재하지 않으면 관리자 아님(else)
               else{
                 vals = {
@@ -57,4 +57,37 @@ app.post('/admin/:method', (req, res) => {
       res.send("ERROR! 정상적인 접근이 아닙니다.");
       break;
   }
+});
+
+// Ajax 요청 관리
+/*
+/ajax/cate/:top,left/:c,r,u,d
+/ajax/cate_sub/:num/:c,r,u,d
+/ajax/ban/:c,r,u,d
+/ajax/prd/:c,r,u,d
+*/
+app.get('/ajax/cate/:method/:chk', (req, res) => {
+	var method = req.params.method;
+	var chk = req.params.chk;
+	switch(method) {
+		case "top":
+			switch(chk) {
+				case "c":
+					break;
+				case "r":
+					res.send("정상");
+					break;
+				case "u":
+					break;
+				case "d":
+					break;
+				default:
+					res.send("ERROR! 정상적인 접근이 아닙니다.");
+					break;
+			}
+			break;
+		default:
+			res.send("ERROR! 정상적인 접근이 아닙니다.");
+			break;
+	}
 });

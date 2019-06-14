@@ -67,39 +67,45 @@ app.post('/admin/:method', (req, res) => {
 /ajax/prd/:c,r,u,d
 
 connect.query(sql,(err, result, field)=>{});
-
-
 */
-app.get('/ajax/cate/:method/:chk', (req, res) => {
+
+app.get(['/ajax/top/:method', '/ajax/top/:method/:id'], (req, res) => {
 	var method = req.params.method;
-	var chk = req.params.chk;
-	switch(method) {
-		case "top":
-			switch(chk) {
-				case "c":
-					break;
+	var id = req.params.id;
+	conn.getConnection((err, connect) => {
+		if(err) {
+			connect.release();
+			res.send("MySQL Connect Error!");
+		}
+		else {
+			switch(method) {
 				case "r":
-					conn.getConnection(( err,connect )=>{
-						if(err) res.send("Database 접속이 불안정 합니다. <br> 다시 접속해주세요.");
-						else {
-							var sql = 'SELECT * FROM cates ORDER BY id ASC';
-							connect.query(sql,(err, result, field)=>{
-								res.send(result);
-							});
-						}
+					var sql = "SELECT * FROM cates WHERE pos='T' ORDER BY id ASC";
+					connect.query(sql, (err, result, field) => {
+						connect.release();
+						if(err) res.send("MySQL Query Error!");
+						else res.send(result);
 					});
 					break;
-				case "u":
+				case "r2":
+					var sql = `SELECT * FROM cate_sub WHERE pid = ${id} ORDER BY grp ASC, lev ASC, id ASC`;
+					connect.query(sql, (err, result, field) => {
+						connect.release();
+						if(err) res.send("MySQL Query Error!");
+						else res.send(result);
+					}); 
 					break;
-				case "d":
+				case "r3": 
+					break;
+				case "d": 
 					break;
 				default:
-					res.send("ERROR! 정상적인 접근이 아닙니다.");
 					break;
 			}
-			break;
-		default:
-			res.send("ERROR! 정상적인 접근이 아닙니다.");
-			break;
-	}
+		}
+	});
 });
+app.get('/ajax/left/', (req, res)=>{});
+app.get('/ajax/ban/', (req, res)=>{});
+app.get('/ajax/prd/', (req, res)=>{});
+
